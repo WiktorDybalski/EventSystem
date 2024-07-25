@@ -1,0 +1,20 @@
+<div class="auth-container">
+  <div class="auth-form">
+    <h2>Register</h2>
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+      <input type="text" id="firstname" name="firstname" placeholder="Firstname" ngModel required>
+
+      <input type="text" id="lastname" name="lastname" placeholder="Lastname" ngModel required>
+
+      <input type="email" id="email" name="email" placeholder="Email" ngModel required>
+
+      <input type="password" id="password" name="password" placeholder="Password" ngModel required>
+
+      <button type="submit" [disabled]="!registerForm.valid">Register</button>
+    </form>
+    <p>Already have an account? <a routerLink="/login">Login</a></p>
+  </div>
+</div>
+
+
+

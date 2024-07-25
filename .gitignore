@@ -1,0 +1,103 @@
+# General
+*.log
+*.tmp
+*.swp
+*.swo
+*.pid
+*.gz
+*.zip
+
+# Node modules (Angular)
+client/node_modules/
+
+# Angular build output
+client/dist/
+client/coverage/
+client/e2e/
+client/.angular/cache/
+client/.angular/*
+!client/angular.json
+
+# Angular specific
+client/.angular/
+client/.editorconfig
+
+# Maven (Spring Boot)
+server/target/
+*.jar
+*.war
+*.ear
+*.pom
+*.class
+*.sql
+*.javadoc
+
+# IntelliJ IDEA
+.idea/
+client/.idea/
+server/.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# WebStorm
+client/*.sublime-project
+client/*.sublime-workspace
+
+# VSCode
+.vscode/
+client/.vscode/
+
+# Java-specific (Eclipse/STS)
+*.project
+*.classpath
+*.settings/
+*.metadata/
+*.factorypath
+
+# Spring Boot
+*.spring-boot-starter
+
+# System Files
+*.DS_Store
+*.Thumbs.db
+
+# Logs
+*.log.*
+
+# JetBrains IDEs
+*.idea/
+*.idea/*
+
+# Environment files
+.env
+.env.*
+
+# Ignoring temporary files
+*.tmp
+*.swp
+*.swo
+*.pid
+*.gz
+*.zip
+
+# Other editor files
+*.suo
+*.user
+*.userosscache
+*.ntvs_analysis.dat
+*.njsproj
+*.sln
+*.sw?
+*.code-workspace
+*.db
+
+# Ignore npm debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore lock files
+package-lock.json
+yarn.lock

@@ -1,0 +1,12 @@
+<div class="tickets">
+  <h1>My Tickets</h1>
+  <div class="tickets-container">
+    <div *ngFor="let ticket of tickets" class="ticket-card">
+      <h2>{{ ticket.eventName }}</h2>
+      <p><strong>Ticket ID:</strong> {{ ticket.ticketId }}</p>
+      <p><strong>Event ID:</strong> {{ ticket.eventId }}</p>
+      <p><strong>User ID:</strong> {{ ticket.userId }}</p>
+      <p><strong>Location:</strong> {{ ticket.eventLocation }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+.chat-icon {
+  position: fixed;
+  bottom: 35px;
+  right: 35px;
+  z-index: 1000;
+}
+
+button[mat-fab] {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #2196f3; /* Niebieski kolor */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+button[mat-fab]:hover {
+  background-color: #1976d2;
+}
+
+button[mat-fab] mat-icon {
+  font-size: 24px;
+}

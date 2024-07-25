@@ -1,0 +1,12 @@
+<header class="app-header">
+  <div class="header-content">
+    <h1 *ngIf="(isLoggedIn$ | async)">Hello {{ userEmail$ | async }}</h1>
+    <h1 *ngIf="!(isLoggedIn$ | async)">Hello!</h1>
+    <nav class="nav">
+      <a routerLink="/">Home</a>
+      <a *ngIf="!(isLoggedIn$ | async)" routerLink="/login">Login</a>
+      <a *ngIf="(isLoggedIn$ | async)" (click)="logout()">Logout</a>
+      <a routerLink="/my-tickets">My Tickets</a>
+    </nav>
+  </div>
+</header>
