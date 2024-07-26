@@ -9,7 +9,7 @@ button[mat-fab] {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background-color: #2196f3; /* Niebieski kolor */
+  background-color: #2196f3;
   color: white;
   display: flex;
   align-items: center;
@@ -26,5 +26,5 @@ button[mat-fab]:hover {
 }
 
 button[mat-fab] mat-icon {
-  font-size: 24px;
+  font-size: 22px;
 }

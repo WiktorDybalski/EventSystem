@@ -13,3 +13,22 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 178328488763-s1da94rqu9393kiuql32fke391p20due.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            client-authentication-method: post
+            authorization-grant-type: authorization_code
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+

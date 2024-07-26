@@ -1,17 +1,13 @@
-import {Component} from '@angular/core';
-import {AsyncPipe, NgIf} from "@angular/common";
-import {Observable} from "rxjs";
-import {AuthService} from "../services/auth.service";
+import { Component } from '@angular/core';
+import { Observable } from "rxjs";
+import { AuthService } from "../services/auth.service";
+import { CommonModule } from '@angular/common';
 import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    NgIf,
-    AsyncPipe,
-    RouterLink
-  ],
+  imports: [CommonModule, RouterLink],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
@@ -28,3 +24,4 @@ export class HeaderComponent {
     this.authService.logout();
   }
 }
+

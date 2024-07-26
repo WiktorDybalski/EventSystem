@@ -22,13 +22,13 @@ export class TicketService {
     return this.http.get<any>(this.apiUrl, { headers, params });
   }
 
-  purchaseTicket(eventId: number) : Observable<any> {
+  purchaseTicket(eventId: number, userEmail: string): Observable<any> {
     const token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-    const params = new HttpParams().set('eventId', eventId);
-    return this.http.post<any>(this.purchaseUrl, {headers, params});
+    const params = new HttpParams().set('eventId', eventId.toString()).set('email', userEmail);
+    return this.http.post<any>(this.purchaseUrl, {}, { headers, params });
   }
 }

@@ -1,22 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {EventService} from "../services/event.service";
-import {catchError, EMPTY, Observable, of, tap} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from "@angular/common";
+import { EventService } from "../services/event.service";
+import { catchError, EMPTY, Observable, of, tap } from "rxjs";
 import { Event } from '../models/event';
-import {TicketService} from "../services/ticket.service";
+import { TicketService } from "../services/ticket.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
   events$: Observable<Event[]> = of([]);
+  userEmail: string = localStorage.getItem('userEmail') || '';
 
-  constructor(private eventService: EventService, private ticketService: TicketService) {
-  }
+  constructor(
+    private eventService: EventService,
+    private ticketService: TicketService,
+    private router: Router // Wstrzyknięcie Routera
+  ) {}
 
   ngOnInit(): void {
     this.eventService.fetchEvents();
@@ -24,10 +29,15 @@ export class HomeComponent implements OnInit {
   }
 
   confirmPurchase(event: Event): void {
-    console.log('Purchasing ticket for event:', event);
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn !== 'true') {
+      this.router.navigate(['/login']);
+      return
+    }
+    console.log('User is logged in, proceeding with ticket purchase for event:', event);
     const confirmed = confirm(`Are you sure you want to purchase a ticket for ${event.name}?`);
     if (confirmed) {
-      this.ticketService.purchaseTicket(event.id).pipe(
+      this.ticketService.purchaseTicket(event.id, this.userEmail).pipe(
         tap(() => alert(`Ticket purchased for ${event.name}`)),
         catchError(error => {
           alert(`Error purchasing ticket for ${event.name}`);

@@ -1,10 +1,12 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {FormsModule, NgForm} from "@angular/forms";
-import {Router, RouterLink} from "@angular/router";
-import {CommonModule} from "@angular/common";
-import {AuthService} from "../services/auth.service";
-import {catchError, of, tap} from "rxjs";
-import {NotificationService} from "../services/notification.service";
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { FormsModule, NgForm } from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { AuthService } from "../services/auth.service";
+import { catchError, of, tap } from "rxjs";
+import { NotificationService } from "../services/notification.service";
+
+declare const google: any;
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,7 @@ import {NotificationService} from "../services/notification.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   @Output() userEmailChange = new EventEmitter<string | null>();
   userEmail: string = '';
@@ -26,7 +28,11 @@ export class LoginComponent {
     private authService: AuthService,
     private notificationService: NotificationService,
     private router: Router
-  ) {}
+  ) { }
+
+  ngOnInit() {
+    this.renderGoogleSignInButton();
+  }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
@@ -54,5 +60,15 @@ export class LoginComponent {
       ).subscribe();
     }
   }
-}
 
+  private renderGoogleSignInButton() {
+    google.accounts.id.initialize({
+      client_id: '178328488763-s1da94rqu9393kiuql32fke391p20due.apps.googleusercontent.com',
+      // callback: this.handleGoogleSignIn.bind(this)
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('g_id_signin'),
+      { theme: 'outline', size: 'large' }
+    );
+  }
+}
