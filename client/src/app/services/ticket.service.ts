@@ -9,6 +9,7 @@ export class TicketService {
 
   private apiUrl = 'http://127.0.0.1:8080/api/v1/user/tickets';
   private purchaseUrl = 'http://127.0.0.1:8080/api/v1/user/purchase-ticket';
+  private addToCalendarUrl = 'http://127.0.0.1:8080/api/v1/user/add-to-google-calendar';
 
   constructor(private http: HttpClient) {}
 
@@ -31,4 +32,14 @@ export class TicketService {
     const params = new HttpParams().set('eventId', eventId.toString()).set('email', userEmail);
     return this.http.post<any>(this.purchaseUrl, {}, { headers, params });
   }
+
+  // addEventToGoogleCalendar(id: number, userEmail: string) {
+  //   const token = localStorage.getItem('authToken');
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${token}`
+  //   });
+  //   const params = new HttpParams().set('eventId', id.toString()).set('email', userEmail);
+  //   return this.http.post<any>(this.addToCalendarUrl, {}, { headers, params });
+  // }
 }

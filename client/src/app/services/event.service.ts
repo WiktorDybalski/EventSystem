@@ -14,7 +14,10 @@ export class EventService {
 
   fetchEvents(): void {
     this.http.get<Event[]>(this.apiUrl).pipe(
-      tap(events => this.eventsSubject.next(events)),
+      tap(events => {
+        console.log('Fetched events from API:', events);
+        this.eventsSubject.next(events);
+      }),
       catchError(error => {
         console.error('Error fetching events', error);
         return of([]);

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from "@angular/router";
-import { NotificationService } from "./notification.service";
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
@@ -18,7 +17,6 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private notificationService: NotificationService
   ) {}
 
   private hasToken(): boolean {
@@ -39,6 +37,10 @@ export class AuthService {
         'Content-Type': 'application/json'
       })
     });
+  }
+
+  authenticateGoogle(credential: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/oauth2/google`, { token: credential });
   }
 
   logout(): void {

@@ -4,7 +4,7 @@ import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { AuthService } from "../services/auth.service";
 import { catchError, of, tap } from "rxjs";
-import { NotificationService } from "../services/notification.service";
+import {AlertService} from "../services/alert.service";
 
 declare const google: any;
 
@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) { }
 
   ngOnInit() {
@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('isLoggedIn', "true");
           localStorage.setItem('userEmail', userEmail ? userEmail : '');
           this.router.navigate(['/my-tickets']);
+          this.alertService.setMessage({type: 'success', text: 'Login successful!'});
         }),
         catchError(error => {
           console.error('Login Error: ', error);
@@ -64,11 +65,32 @@ export class LoginComponent implements OnInit {
   private renderGoogleSignInButton() {
     google.accounts.id.initialize({
       client_id: '178328488763-s1da94rqu9393kiuql32fke391p20due.apps.googleusercontent.com',
-      // callback: this.handleGoogleSignIn.bind(this)
+      callback: this.handleGoogleSignIn.bind(this)
     });
     google.accounts.id.renderButton(
       document.getElementById('g_id_signin'),
       { theme: 'outline', size: 'large' }
     );
+  }
+
+  private handleGoogleSignIn(response: any) {
+    console.log('Google Sign-In response:', response);
+    this.authService.authenticateGoogle(response.credential).pipe(
+      tap(response => {
+        console.log('Google login success: ', response);
+        localStorage.setItem('authToken', response.token);
+        const userEmail = this.authService.getUserEmail();
+        this.authService.setUserEmail(userEmail);
+        this.userEmailChange.emit(userEmail);
+        this.authService.setLoggedIn(true);
+        localStorage.setItem('isLoggedIn', "true");
+        localStorage.setItem('userEmail', userEmail ? userEmail : '');
+        this.router.navigate(['/my-tickets']);
+      }),
+      catchError(error => {
+        console.error('Google login Error: ', error);
+        return of(null);
+      })
+    ).subscribe();
   }
 }

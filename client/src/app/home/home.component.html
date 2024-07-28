@@ -1,12 +1,20 @@
 <div class="events">
-  <h1>Available Events</h1>
+  <h2>Available Events</h2>
   <div class="event-grid">
     <div class="event-card" *ngFor="let event of events$ | async" (click)="confirmPurchase(event)">
       <img [src]="event.imageUrl" alt="{{ event.name }}">
       <div class="event-details">
         <h2>{{ event.name }}</h2>
-        <p>{{ event.location }}</p>
+        <p>{{ event.startDate | date: 'short' }}</p>
+        <p>
+          <a href="#" (click)="openGoogleMaps($event, event.googleMapsUrl)">
+            {{ event.location }}
+            <i class="fas fa-map-marker-alt"></i>
+          </a>
+        </p>
       </div>
     </div>
   </div>
 </div>
+
+

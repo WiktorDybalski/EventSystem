@@ -3,4 +3,7 @@ export interface Event {
   name: string;
   location: string;
   imageUrl: string;
+  googleMapsUrl: string;
+  startDate: string;
+  endDate: string;
 }

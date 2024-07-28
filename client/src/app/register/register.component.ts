@@ -4,7 +4,6 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, NgForm} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {catchError, of, tap} from "rxjs";
-import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-register',
@@ -19,7 +18,6 @@ export class RegisterComponent {
   @Output() userEmailChange = new EventEmitter<string | null>();
   constructor(
     private authService: AuthService,
-    private notificationService: NotificationService,
     private router: Router
   ){}
 
