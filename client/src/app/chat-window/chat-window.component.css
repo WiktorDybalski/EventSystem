@@ -2,12 +2,12 @@
   position: fixed;
   bottom: 10px;
   right: 30px;
-  width: 300px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
   max-width: 90%;
   background: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   z-index: 1000;
@@ -16,7 +16,7 @@
 .chat-header {
   background: #2196f3;
   color: white;
-  padding: 10px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,17 +42,37 @@
 
 .chat-footer input {
   flex: 1;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-right: 10px;
+  width: 80%;
 }
 
 .chat-footer button {
   background: #2196f3;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
+  width: 20%;
+  padding: 8px 10px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+.chat-message {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-message {
+  background: #2196f3;
+  align-self: flex-end;
+}
+
+.other-message {
+  background: #f1f1f1;
+  align-self: flex-start;
 }

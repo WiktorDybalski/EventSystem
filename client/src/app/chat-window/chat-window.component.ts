@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-// import { WebSocketService } from '../services/webSocket.service';
-
+import {Component, EventEmitter, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {WebSocketService} from "../services/webSocket.service";
+import {LocalStorageService} from "../services/localStorage.service";
 @Component({
   selector: 'app-chat-window',
   standalone: true,
@@ -12,31 +12,41 @@ import { FormsModule } from '@angular/forms';
 })
 export class ChatWindowComponent {
   @Output() close = new EventEmitter<void>();
-  messages: string[] = [];
+  messages: {user: string, content: string}[] = [];
+  username : string;
   message: string = '';
-  username: string = localStorage.getItem('username') || 'New User';
 
-  // constructor(private webSocketService: WebSocketService) {}
-
-  ngOnInit() {
-    // this.webSocketService.messages$.subscribe((msg) => {
-    //   this.messages.push(msg);
-    // });
+  constructor(private webSocketService: WebSocketService, private localStorageService: LocalStorageService) {
+    this.username = this.localStorageService.getUserEmail();
+    console.log('Starting conversation...');
+    this.webSocketService.getMessages().subscribe((message: {user: string, content: string}) => {
+      this.messages.push(message);
+    });
+    this.sendHello();
   }
 
-  closeChat() {
-    this.close.emit();
+  sendHello(): void {
+    console.log(this.username + ': joined the chat!');
+    const joinMessage = { user: this.username, content: `${this.username} joined the chat!` };
+    this.webSocketService.sendMessage(joinMessage);
+    this.messages.push(joinMessage);
   }
 
-  sendMessage() {
-    if (this.message.trim()) {
+  sendMessage(): void {
+    if (this.message.trim() !== '') {
       const chatMessage = {
-        sender: this.username,
-        content: this.message,
-        type: 'CHAT'
-      };
-      // this.webSocketService.sendMessage(chatMessage);
+        user: this.username, content: `${this.username}: ${this.message}`};
+      console.log('Sending message: ' + this.message);
+      this.webSocketService.sendMessage(chatMessage);
       this.message = '';
+    } else {
+      console.log('Message is empty, not sending.');
     }
+  }
+
+
+  closeChat(): void {
+    console.log('Chat closed.');
+    this.close.emit();
   }
 }

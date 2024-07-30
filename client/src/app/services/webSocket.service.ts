@@ -1,69 +1,55 @@
-// import { Injectable } from '@angular/core';
-// import { Client, IMessage, IFrame } from '@stomp/stompjs';
-// import SockJS from 'sockjs-client';
-// import { BehaviorSubject } from 'rxjs';
-//
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class WebSocketService {
-//   private stompClient: Client | null = null;
-//   private messageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
-//
-//   messages$ = this.messageSubject.asObservable();
-//
-//   constructor() {
-//     this.connect();
-//   }
-//
-//   connect() {
-//     const socket = new SockJS('http://localhost:8080/ws');
-//     this.stompClient = new Client({
-//       webSocketFactory: () => socket,
-//       debug: (str) => {
-//         console.log(str);
-//       },
-//       reconnectDelay: 5000,
-//       heartbeatIncoming: 4000,
-//       heartbeatOutgoing: 4000
-//     });
-//
-//     this.stompClient.onConnect = (frame: IFrame) => this.onConnected(frame);
-//     this.stompClient.onStompError = (frame: IFrame) => this.onError(frame);
-//
-//     this.stompClient.activate();
-//   }
-//
-//   onConnected(frame: IFrame) {
-//     console.log('Connected: ' + frame);
-//     this.stompClient!.subscribe('/topic/public', (message: IMessage) => this.onMessageReceived(message));
-//   }
-//
-//   onError(frame: IFrame) {
-//     console.error('Could not connect to WebSocket server. Please refresh this page to try again!', frame);
-//   }
-//
-//   sendMessage(chatMessage: any) {
-//     if (this.stompClient && this.stompClient.connected) {
-//       this.stompClient.publish({
-//         destination: '/app/chat.sendMessage',
-//         body: JSON.stringify(chatMessage)
-//       });
-//     }
-//   }
-//
-//   addUser(username: string) {
-//     if (this.stompClient && this.stompClient.connected) {
-//       const chatMessage = { sender: username, type: 'JOIN' };
-//       this.stompClient.publish({
-//         destination: '/app/chat.addUser',
-//         body: JSON.stringify(chatMessage)
-//       });
-//     }
-//   }
-//
-//   onMessageReceived(message: IMessage) {
-//     const messageBody = JSON.parse(message.body);
-//     this.messageSubject.next(messageBody.content);
-//   }
-// }
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {Client, IMessage} from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WebSocketService {
+  private stompClient: Client | undefined;
+
+  private messageSubject: Subject<{ user: string, content: string }> = new Subject<{ user: string, content: string }>();
+
+  constructor() {
+    this.connect();
+  }
+
+  private connect(): void {
+    console.log('Connecting to WebSocket...');
+    const socket = new SockJS('http://localhost:8080/ws');
+    this.stompClient = new Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000
+    });
+
+    this.stompClient.onConnect = (frame) => {
+      console.log('Connected: ' + frame);
+      this.stompClient?.subscribe('/topic/public', (message: IMessage) => {
+        console.log('Received message: ' + message.body);
+        const parsedMessage = JSON.parse(message.body) as { user: string, content: string };
+        this.messageSubject.next(parsedMessage);
+      });
+    };
+
+    this.stompClient.activate();
+  }
+
+  sendMessage(message: { user: string | null; content: string }): void {
+    if (this.stompClient?.connected) {
+      console.log('Sending message: ' + JSON.stringify(message));
+      this.stompClient.publish({
+        destination: '/app/chat.sendMessage',
+        body: JSON.stringify(message)
+      });
+    } else {
+      console.error('STOMP client is not connected.');
+    }
+  }
+
+  getMessages(): Observable<{ user: string, content: string }> {
+    return this.messageSubject.asObservable();
+  }
+}
