@@ -11,7 +11,7 @@ export class AuthService {
 
   private apiUrl = 'http://127.0.0.1:8080/api/v1/auth';
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-  private userEmail = new BehaviorSubject<string | null>(localStorage.getItem('userEmail'));
+  private userEmail = new BehaviorSubject<string | null>(sessionStorage.getItem('userEmail'));
   private jwtHelper = new JwtHelperService();
 
   constructor(
@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('authToken');
+    return !!sessionStorage.getItem('authToken');
   }
 
   register(registerRequest: any): Observable<any> {
@@ -47,9 +47,9 @@ export class AuthService {
     this.removeToken();
     this.loggedIn.next(false);
     this.userEmail.next(null);
-    localStorage.removeItem('authToken');
-    localStorage.setItem('isLoggedIn', "false");
-    localStorage.setItem('userEmail', '');
+    sessionStorage.removeItem('authToken');
+    sessionStorage.setItem('isLoggedIn', "false");
+    sessionStorage.setItem('userEmail', '');
     this.router.navigate(['/login']);
   }
 
@@ -62,11 +62,11 @@ export class AuthService {
   }
 
   private removeToken(): void {
-    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
   }
 
   getUserEmail(): string | null {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       return decodedToken.sub;

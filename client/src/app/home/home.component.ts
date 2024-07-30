@@ -15,7 +15,7 @@ import { Router } from "@angular/router";
 })
 export class HomeComponent implements OnInit {
   events$: Observable<Event[]> = of([]);
-  userEmail: string = localStorage.getItem('userEmail') || '';
+  userEmail: string = sessionStorage.getItem('userEmail') || '';
 
   constructor(
     private eventService: EventService,
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   }
 
   confirmPurchase(event: Event): void {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     if (isLoggedIn !== 'true') {
       this.router.navigate(['/login']);
       return;

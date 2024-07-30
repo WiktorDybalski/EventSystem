@@ -13,7 +13,7 @@ import { MatFabButton } from '@angular/material/button';
 })
 export class ChatIconComponent {
   isChatOpen = false;
-  userEmail: string = localStorage.getItem('userEmail') || 'User';
+  userEmail: string = sessionStorage.getItem('userEmail') || 'User';
 
 
   openChat() {

@@ -14,7 +14,7 @@ export class TicketService {
   constructor(private http: HttpClient) {}
 
   getTickets(userEmail: string): Observable<any> {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -24,7 +24,7 @@ export class TicketService {
   }
 
   purchaseTicket(eventId: number, userEmail: string): Observable<any> {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`

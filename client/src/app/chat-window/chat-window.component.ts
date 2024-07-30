@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {WebSocketService} from "../services/webSocket.service";
@@ -10,17 +10,22 @@ import {LocalStorageService} from "../services/localStorage.service";
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.css']
 })
-export class ChatWindowComponent {
+export class ChatWindowComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   messages: {user: string, content: string}[] = [];
   username : string;
   message: string = '';
 
   constructor(private webSocketService: WebSocketService, private localStorageService: LocalStorageService) {
-    this.username = this.localStorageService.getUserEmail();
+    this.username = sessionStorage.getItem('userEmail') || '';
+  }
+
+  ngOnInit() {
     console.log('Starting conversation...');
     this.webSocketService.getMessages().subscribe((message: {user: string, content: string}) => {
+      console.log('Received message: ', message);
       this.messages.push(message);
+
     });
     this.sendHello();
   }

@@ -45,13 +45,13 @@ export class LoginComponent implements OnInit {
       this.authService.authenticate({email, password}).pipe(
         tap(response => {
           console.log('Login success: ', response);
-          localStorage.setItem('authToken', response.token);
+          sessionStorage.setItem('authToken', response.token);
           const userEmail = this.authService.getUserEmail();
           this.authService.setUserEmail(userEmail);
           this.userEmailChange.emit(userEmail);
           this.authService.setLoggedIn(true);
-          localStorage.setItem('isLoggedIn', "true");
-          localStorage.setItem('userEmail', userEmail ? userEmail : '');
+          sessionStorage.setItem('isLoggedIn', "true");
+          sessionStorage.setItem('userEmail', userEmail ? userEmail : '');
           this.router.navigate(['/my-tickets']);
           this.alertService.setMessage({type: 'success', text: 'Login successful!'});
         }),
@@ -96,13 +96,13 @@ export class LoginComponent implements OnInit {
     this.authService.authenticateGoogle(response.credential).pipe(
       tap(response => {
         console.log('Google login success: ', response);
-        localStorage.setItem('authToken', response.token);
+        sessionStorage.setItem('authToken', response.token);
         const userEmail = this.authService.getUserEmail();
         this.authService.setUserEmail(userEmail);
         this.userEmailChange.emit(userEmail);
         this.authService.setLoggedIn(true);
-        localStorage.setItem('isLoggedIn', "true");
-        localStorage.setItem('userEmail', userEmail ? userEmail : '');
+        sessionStorage.setItem('isLoggedIn', "true");
+        sessionStorage.setItem('userEmail', userEmail ? userEmail : '');
         this.router.navigate(['/my-tickets']);
       }),
       catchError(error => {
