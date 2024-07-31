@@ -4,10 +4,15 @@
     <button (click)="closeChat()">X</button>
   </div>
   <div class="chat-body">
-    <div *ngFor="let msg of messages">{{ msg }}</div>
+    <div *ngFor="let msg of messages"
+         [ngClass]="{'chat-message': true, 'user-message': (msg.user === (username$ | async)), 'other-message': (msg.user !== (username$ | async))}">
+      <strong>{{ msg.user }}:</strong> {{ msg.content }}
+    </div>
   </div>
   <div class="chat-footer">
     <input [(ngModel)]="message" placeholder="Type your message here..." (keydown.enter)="sendMessage()" />
     <button (click)="sendMessage()">Send</button>
   </div>
 </div>
+
+

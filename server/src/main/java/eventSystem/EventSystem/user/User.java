@@ -25,6 +25,7 @@ public class User implements UserDetails {
     private Integer id;
     private String firstname;
     private String lastname;
+    private String phoneNumber;
     private String email;
     private String password;
 
@@ -40,6 +41,7 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

@@ -1,6 +1,5 @@
 <app-header></app-header>
 <main class="main">
-  <app-alert [message]="alertMessage"></app-alert>
   <router-outlet></router-outlet>
-  <app-chat-icon></app-chat-icon>
+  <app-chat-icon *ngIf="isLoggedIn$ | async"></app-chat-icon>
 </main>

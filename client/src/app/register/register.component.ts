@@ -14,35 +14,30 @@ import {catchError, of, tap} from "rxjs";
 })
 export class RegisterComponent {
 
-  userEmail: string | null = null;
+  userEmail: string = '';
   @Output() userEmailChange = new EventEmitter<string | null>();
+
   constructor(
     private authService: AuthService,
-    private router: Router
-  ){}
+    private router: Router,
+  ) {
+  }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
       const firstname = form.value.firstname;
       const lastname = form.value.lastname;
+      const phoneNumber = form.value.phoneNumber;
       const email = form.value.email;
       const password = form.value.password;
 
-      console.log('firstname:', firstname);
-      console.log('lastname:', lastname);
-      console.log('Email:', email);
-      console.log('Password:', password);
 
-      this.authService.register({firstname, lastname, email, password}).pipe(
+      this.authService.register({firstname, lastname, phoneNumber, email, password}).pipe(
         tap(response => {
-          console.log('Register success: ', response);
-          localStorage.setItem('authToken', response.token);
-          const userEmail = this.authService.getUserEmail();
-          this.authService.setUserEmail(userEmail);
-          this.userEmailChange.emit(userEmail);
+          this.authService.setAuthToken(response.token);
           this.authService.setLoggedIn(true);
-          localStorage.setItem('isLoggedIn', "true");
-          localStorage.setItem('userEmail', userEmail ? userEmail : '');
+          this.authService.setUserEmail(email);
+          this.userEmailChange.emit(email);
           this.router.navigate(['/my-tickets']);
         }),
         catchError(error => {
