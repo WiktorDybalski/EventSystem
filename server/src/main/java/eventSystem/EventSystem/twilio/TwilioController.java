@@ -10,7 +10,7 @@ import javax.validation.Valid;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping(path = "api/v1/sms")
+@RequestMapping(path = "/api/v1/sms")
 public class TwilioController {
 
     private final TwilioService twilioService;

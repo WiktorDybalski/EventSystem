@@ -17,6 +17,7 @@ public class TwilioSmsSender implements SmsSender {
     private final UserRepository userRepository;
 
     private String getPhoneNumber(SmsRequest smsRequest) {
+        System.out.println(smsRequest.getUserEmail());
         User user = userRepository.findByEmail(smsRequest.getUserEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         return user.getPhoneNumber();

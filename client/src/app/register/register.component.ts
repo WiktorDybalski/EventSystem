@@ -14,12 +14,14 @@ import {catchError, of, tap} from "rxjs";
 })
 export class RegisterComponent {
 
-  userEmail: string | null = null;
+  userEmail: string = '';
   @Output() userEmailChange = new EventEmitter<string | null>();
+
   constructor(
     private authService: AuthService,
-    private router: Router
-  ){}
+    private router: Router,
+  ) {
+  }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
@@ -32,15 +34,10 @@ export class RegisterComponent {
 
       this.authService.register({firstname, lastname, phoneNumber, email, password}).pipe(
         tap(response => {
-          console.log('Register success: ', response);
-          sessionStorage.setItem('authToken', response.token);
-          const userEmail = this.authService.getUserEmail();
-          this.authService.setUserEmail(userEmail);
-          this.userEmailChange.emit(userEmail);
+          this.authService.setAuthToken(response.token);
           this.authService.setLoggedIn(true);
-          sessionStorage.setItem('isLoggedIn', "true");
-          sessionStorage.setItem('userEmail', userEmail ? userEmail : '');
-          sessionStorage.setItem('phoneNumber', phoneNumber);
+          this.authService.setUserEmail(email);
+          this.userEmailChange.emit(email);
           this.router.navigate(['/my-tickets']);
         }),
         catchError(error => {

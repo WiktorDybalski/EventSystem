@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {Client, IMessage} from '@stomp/stompjs';
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { Client, IMessage, StompConfig, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 @Injectable({
@@ -8,15 +8,14 @@ import SockJS from 'sockjs-client';
 })
 export class WebSocketService {
   private stompClient: Client | undefined;
-
   private messageSubject: Subject<{ user: string, content: string }> = new Subject<{ user: string, content: string }>();
+  private connectionSubject: Subject<void> = new Subject<void>();
 
   constructor() {
     this.connect();
   }
 
   private connect(): void {
-    console.log('Connecting to WebSocket...');
     const socket = new SockJS('http://localhost:8080/ws');
     this.stompClient = new Client({
       webSocketFactory: () => socket,
@@ -25,13 +24,12 @@ export class WebSocketService {
       heartbeatOutgoing: 4000
     });
 
-    this.stompClient.onConnect = (frame) => {
-      console.log('Connected: ' + frame);
+    this.stompClient.onConnect = () => {
       this.stompClient?.subscribe('/topic/public', (message: IMessage) => {
-        console.log('Received message: ' + message.body);
         const parsedMessage = JSON.parse(message.body) as { user: string, content: string };
         this.messageSubject.next(parsedMessage);
       });
+      this.connectionSubject.next();
     };
 
     this.stompClient.activate();
@@ -39,7 +37,6 @@ export class WebSocketService {
 
   sendMessage(message: { user: string | null; content: string }): void {
     if (this.stompClient?.connected) {
-      console.log('Sending message: ' + JSON.stringify(message));
       this.stompClient.publish({
         destination: '/app/chat.sendMessage',
         body: JSON.stringify(message)
@@ -52,4 +49,9 @@ export class WebSocketService {
   getMessages(): Observable<{ user: string, content: string }> {
     return this.messageSubject.asObservable();
   }
+
+  getConnection(): Observable<void> {
+    return this.connectionSubject.asObservable();
+  }
 }
+

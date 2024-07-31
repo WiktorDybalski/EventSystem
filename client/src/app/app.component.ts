@@ -1,27 +1,29 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {HeaderComponent} from "./header/header.component";
-import {Observable} from "rxjs";
-import {AuthService} from "./services/auth.service";
 import {ChatIconComponent} from "./chat-icon/chat-icon.component";
 import {ChatWindowComponent} from "./chat-window/chat-window.component";
-import {AlertService} from "./services/alert.service";
-import {AlertComponent} from "./alert/alert.component";
+import {NotificationComponent} from "./notification/notification.component";
 import {AsyncPipe, NgIf} from "@angular/common";
+import {AuthService} from "./services/auth.service";
+import {Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, ChatIconComponent, ChatWindowComponent, AlertComponent, NgIf, AsyncPipe],
+  imports: [RouterOutlet, HeaderComponent, ChatIconComponent, ChatWindowComponent, NotificationComponent, NgIf, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Event Ticketing System';
-  isLoggedIn$: Observable<boolean>;
-  alertMessage: { type: string, text: string } | null = null;
+  isLoggedIn$: Observable<boolean> = of(false);
+  userEmail$: Observable<string | null> = of(null);
 
-  constructor(private authService: AuthService) {
-    this.isLoggedIn$ = this.authService.isLoggedIn();
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn$ = this.authService.getIsLoggedIn();
+    this.userEmail$ = this.authService.getUserEmail();
   }
 }

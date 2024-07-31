@@ -4,7 +4,6 @@ import {Router, RouterLink} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {AuthService} from "../services/auth.service";
 import {catchError, of, tap} from "rxjs";
-import {AlertService} from "../services/alert.service";
 
 declare const google: any;
 
@@ -27,7 +26,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private alertService: AlertService
   ) {
   }
 
@@ -39,21 +37,14 @@ export class LoginComponent implements OnInit {
     if (form.valid) {
       const email = form.value.email;
       const password = form.value.password;
-      console.log('Email:', email);
-      console.log('Password:', password);
 
       this.authService.authenticate({email, password}).pipe(
         tap(response => {
-          console.log('Login success: ', response);
-          sessionStorage.setItem('authToken', response.token);
-          const userEmail = this.authService.getUserEmail();
-          this.authService.setUserEmail(userEmail);
-          this.userEmailChange.emit(userEmail);
+          this.authService.setUserEmail(email);
           this.authService.setLoggedIn(true);
-          sessionStorage.setItem('isLoggedIn', "true");
-          sessionStorage.setItem('userEmail', userEmail ? userEmail : '');
+          this.authService.setAuthToken(response.token);
+          this.userEmailChange.emit(email);
           this.router.navigate(['/my-tickets']);
-          this.alertService.setMessage({type: 'success', text: 'Login successful!'});
         }),
         catchError(error => {
           console.error('Login Error: ', error);
@@ -85,24 +76,13 @@ export class LoginComponent implements OnInit {
   }
 
   private handleGoogleSignIn(response: any) {
-    console.log('Google Sign-In response:', response);
-
-    // Check if the response includes the necessary scopes
-    if (response.scope && response.scope.includes('https://www.googleapis.com/auth/calendar')) {
-      console.log('Calendar scope granted.');
-    } else {
-      console.error('Calendar scope not granted.');
-    }
     this.authService.authenticateGoogle(response.credential).pipe(
       tap(response => {
-        console.log('Google login success: ', response);
-        sessionStorage.setItem('authToken', response.token);
-        const userEmail = this.authService.getUserEmail();
+        this.authService.setAuthToken(response.token);
+        this.authService.setLoggedIn(true);
+        const userEmail = this.authService.getEmailFromToken();
         this.authService.setUserEmail(userEmail);
         this.userEmailChange.emit(userEmail);
-        this.authService.setLoggedIn(true);
-        sessionStorage.setItem('isLoggedIn', "true");
-        sessionStorage.setItem('userEmail', userEmail ? userEmail : '');
         this.router.navigate(['/my-tickets']);
       }),
       catchError(error => {

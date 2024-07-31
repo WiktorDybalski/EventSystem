@@ -40,3 +40,5 @@ twilio:
   account_sid: AC5267434815f467fb3b5fb5f332e6107f
   auth_token: 1620e13f35dca746c425778d384b933a
   trial_number: +12052368266
+
+# pg_ctl -D "C:\Program Files\PostgreSQL\16\data" start

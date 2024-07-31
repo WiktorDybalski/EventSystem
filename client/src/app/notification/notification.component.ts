@@ -2,15 +2,15 @@ import {Component, Input} from '@angular/core';
 import {NgClass} from "@angular/common";
 
 @Component({
-  selector: 'app-alert',
+  selector: 'app-notification',
   standalone: true,
   imports: [
     NgClass
   ],
-  templateUrl: './alert.component.html',
-  styleUrl: './alert.component.css'
+  templateUrl: './notification.component.html',
+  styleUrl: './notification.component.css'
 })
-export class AlertComponent {
+export class NotificationComponent {
   @Input() message: { type: string, text: string } | null = null;
 
     clearMessage() {

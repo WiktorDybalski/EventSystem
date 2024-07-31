@@ -5,7 +5,7 @@
   </div>
   <div class="chat-body">
     <div *ngFor="let msg of messages"
-         [ngClass]="{'chat-message': true, 'user-message': msg.user === this.username, 'other-message': msg.user !== this.username}">
+         [ngClass]="{'chat-message': true, 'user-message': (msg.user === (username$ | async)), 'other-message': (msg.user !== (username$ | async))}">
       <strong>{{ msg.user }}:</strong> {{ msg.content }}
     </div>
   </div>

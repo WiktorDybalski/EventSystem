@@ -1,8 +1,10 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {WebSocketService} from "../services/webSocket.service";
-import {LocalStorageService} from "../services/localStorage.service";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { WebSocketService } from "../services/webSocket.service";
+import { AuthService } from "../services/auth.service";
+import { Observable } from "rxjs";
+
 @Component({
   selector: 'app-chat-window',
   standalone: true,
@@ -12,46 +14,63 @@ import {LocalStorageService} from "../services/localStorage.service";
 })
 export class ChatWindowComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
-  messages: {user: string, content: string}[] = [];
-  username : string;
+  messages: { user: string, content: string }[] = [];
+  username$: Observable<string | null>;
   message: string = '';
 
-  constructor(private webSocketService: WebSocketService, private localStorageService: LocalStorageService) {
-    this.username = sessionStorage.getItem('userEmail') || '';
+  constructor(
+    private webSocketService: WebSocketService,
+    private authService: AuthService
+  ) {
+    this.username$ = this.authService.getUserEmail();
   }
 
   ngOnInit() {
-    console.log('Starting conversation...');
-    this.webSocketService.getMessages().subscribe((message: {user: string, content: string}) => {
-      console.log('Received message: ', message);
-      this.messages.push(message);
-
+    this.webSocketService.getMessages().subscribe({
+      next: (message: { user: string, content: string }) => {
+        this.messages.push(message);
+      },
+      error: (error: any) => {
+        console.error('Error receiving message: ', error);
+      }
     });
-    this.sendHello();
+
+    this.username$.subscribe(username => {
+      if (username) {
+        this.webSocketService.getConnection().subscribe(() => {
+          this.sendHello(username);
+        });
+      }
+    });
   }
 
-  sendHello(): void {
-    console.log(this.username + ': joined the chat!');
-    const joinMessage = { user: this.username, content: `${this.username} joined the chat!` };
+  sendHello(username: string): void {
+    console.log(username + ': joined the chat!');
+    const joinMessage = { user: username, content: `${username} joined the chat!` };
     this.webSocketService.sendMessage(joinMessage);
-    this.messages.push(joinMessage);
   }
 
   sendMessage(): void {
     if (this.message.trim() !== '') {
-      const chatMessage = {
-        user: this.username, content: `${this.username}: ${this.message}`};
-      console.log('Sending message: ' + this.message);
-      this.webSocketService.sendMessage(chatMessage);
-      this.message = '';
+      this.username$.subscribe(username => {
+        if (username) {
+          const chatMessage = {
+            user: username,
+            content: `${username}: ${this.message}`
+          };
+          this.webSocketService.sendMessage(chatMessage);
+          this.message = '';
+        }
+      });
     } else {
       console.log('Message is empty, not sending.');
     }
   }
-
 
   closeChat(): void {
     console.log('Chat closed.');
     this.close.emit();
   }
 }
+
+
