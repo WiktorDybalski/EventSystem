@@ -25,15 +25,12 @@ export class RegisterComponent {
     if (form.valid) {
       const firstname = form.value.firstname;
       const lastname = form.value.lastname;
+      const phoneNumber = form.value.phoneNumber;
       const email = form.value.email;
       const password = form.value.password;
 
-      console.log('firstname:', firstname);
-      console.log('lastname:', lastname);
-      console.log('Email:', email);
-      console.log('Password:', password);
 
-      this.authService.register({firstname, lastname, email, password}).pipe(
+      this.authService.register({firstname, lastname, phoneNumber, email, password}).pipe(
         tap(response => {
           console.log('Register success: ', response);
           sessionStorage.setItem('authToken', response.token);
@@ -43,6 +40,7 @@ export class RegisterComponent {
           this.authService.setLoggedIn(true);
           sessionStorage.setItem('isLoggedIn', "true");
           sessionStorage.setItem('userEmail', userEmail ? userEmail : '');
+          sessionStorage.setItem('phoneNumber', phoneNumber);
           this.router.navigate(['/my-tickets']);
         }),
         catchError(error => {

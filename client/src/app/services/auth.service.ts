@@ -50,6 +50,7 @@ export class AuthService {
     sessionStorage.removeItem('authToken');
     sessionStorage.setItem('isLoggedIn', "false");
     sessionStorage.setItem('userEmail', '');
+    sessionStorage.setItem('phoneNumber', '');
     this.router.navigate(['/login']);
   }
 

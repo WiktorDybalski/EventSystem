@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { EventService } from "../services/event.service";
-import { catchError, EMPTY, Observable, of, tap } from "rxjs";
-import { Event } from '../models/event';
-import { TicketService } from "../services/ticket.service";
-import { Router } from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from "@angular/common";
+import {EventService} from "../services/event.service";
+import {catchError, EMPTY, Observable, of, switchMap, tap} from "rxjs";
+import {Event} from '../models/event';
+import {TicketService} from "../services/ticket.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,8 @@ export class HomeComponent implements OnInit {
     private eventService: EventService,
     private ticketService: TicketService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.eventService.fetchEvents();
@@ -38,21 +39,20 @@ export class HomeComponent implements OnInit {
     const confirmed = confirm(`Are you sure you want to purchase a ticket for ${event.name}?`);
     if (confirmed) {
       this.ticketService.purchaseTicket(event.id, this.userEmail).pipe(
-        tap(() => {
+        switchMap(() => {
           alert(`Ticket purchased for ${event.name}`);
-          // const addToCalendarConfirmed = confirm(`Do you want to add this event to your Google Calendar?`);
-          // if (addToCalendarConfirmed) {
-          //   this.ticketService.addEventToGoogleCalendar(event.id, this.userEmail).pipe(
-          //     tap(() => alert(`Event added to Google Calendar for ${event.name}`)),
-          //     catchError(error => {
-          //       alert(`Error adding event to Google Calendar for ${event.name}`);
-          //       return EMPTY;
-          //     })
-          //   ).subscribe();
-          // }
+          return this.ticketService.sendTicketSmsConfirmation(
+            event.name,
+            event.startDate,
+            event.location,
+            event.googleMapsUrl
+          );
+        }),
+        tap(() => {
+          alert(`SMS confirmation sent for ${event.name}`);
         }),
         catchError(error => {
-          alert(`Error purchasing ticket for ${event.name}`);
+          alert(`Error purchasing ticket or sending SMS for ${event.name}`);
           return EMPTY;
         })
       ).subscribe();
@@ -60,11 +60,8 @@ export class HomeComponent implements OnInit {
   }
 
   openGoogleMaps(event: MouseEvent, googleMapsUrl: string): void {
-    event.preventDefault(); // Prevent default anchor behavior
-    event.stopPropagation(); // Prevent the click event from bubbling up
-
-    // Debugging
-    console.log('Opening Google Maps URL:', googleMapsUrl);
+    event.preventDefault();
+    event.stopPropagation();
 
     if (googleMapsUrl) {
       window.open(googleMapsUrl, '_blank');
