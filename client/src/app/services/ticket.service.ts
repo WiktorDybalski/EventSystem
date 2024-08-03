@@ -43,7 +43,6 @@ export class TicketService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.token}`
     });
-    console.log(userEmail)
     const smsRequest = {
       email: userEmail,
       message: `Kupiłes bilet na ${eventName} na dzień ${startDate} w ${location}. Sprawdź jak dojechać: ${googleMapsUrl}`

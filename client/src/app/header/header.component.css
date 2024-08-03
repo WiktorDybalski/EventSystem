@@ -34,8 +34,11 @@
   color: #fff;
   text-decoration: none;
   font-size: 1rem;
+  font-weight: 700;
 }
 
 .nav a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  cursor: pointer;
+  color: #721c24;
 }

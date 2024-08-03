@@ -13,12 +13,9 @@ public class SmsRequest {
     private String userEmail;
 
     @NotBlank
-    private String phoneNumber;
-
-    @NotBlank
     private String message;
 
-    public SmsRequest(@JsonProperty("userEmail") String userEmail,
+    public SmsRequest(@JsonProperty("email") String userEmail,
                       @JsonProperty("message") String message) {
         this.userEmail = userEmail;
         this.message = message;

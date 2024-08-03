@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {Router} from "@angular/router";
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {SessionStorageService} from './sessionStorage.service';
+import {NotificationService} from "./notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private sessionStorageService: SessionStorageService
+    private sessionStorageService: SessionStorageService,
+    private notificationService: NotificationService
   ) {
     const isLoggedIn = this.sessionStorageService.getIsLoggedIn();
     const userEmail = this.getEmailFromToken();
@@ -42,10 +44,6 @@ export class AuthService {
 
   setAuthToken(token: string): void {
     this.sessionStorageService.setAuthToken(token);
-  }
-
-  getAuthToken(): string {
-    return <string>this.sessionStorageService.getAuthToken();
   }
 
   public setLoggedIn(value: boolean): void {
@@ -90,6 +88,7 @@ export class AuthService {
     this.sessionStorageService.setLogoutVariables();
     this.loggedInSubject.next(false);
     this.userEmailSubject.next(null);
+    this.notificationService.showNotification('Logout successfully', 'success');
     this.router.navigate(['/login']);
   }
 }

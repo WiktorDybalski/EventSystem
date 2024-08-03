@@ -3,5 +3,7 @@ export interface Ticket {
   eventId: number;
   userId: number;
   eventName: string;
+  startDate: string;
+  endDate: string;
   eventLocation: string;
 }

@@ -4,6 +4,7 @@ import {Router, RouterLink} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {AuthService} from "../services/auth.service";
 import {catchError, of, tap} from "rxjs";
+import {NotificationService} from "../services/notification.service";
 
 declare const google: any;
 
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -44,10 +46,12 @@ export class LoginComponent implements OnInit {
           this.authService.setLoggedIn(true);
           this.authService.setAuthToken(response.token);
           this.userEmailChange.emit(email);
+          this.notificationService.showNotification('Logged in successfully', 'success');
           this.router.navigate(['/my-tickets']);
         }),
         catchError(error => {
           console.error('Login Error: ', error);
+          this.notificationService.showNotification('Login Error', 'failed');
           return of(null);
         })
       ).subscribe();
@@ -76,17 +80,21 @@ export class LoginComponent implements OnInit {
   }
 
   private handleGoogleSignIn(response: any) {
+    console.log('Google login response: ', response);
     this.authService.authenticateGoogle(response.credential).pipe(
       tap(response => {
+        console.log('Google login response: ', response);
         this.authService.setAuthToken(response.token);
         this.authService.setLoggedIn(true);
         const userEmail = this.authService.getEmailFromToken();
         this.authService.setUserEmail(userEmail);
         this.userEmailChange.emit(userEmail);
+        this.notificationService.showNotification('Logged in successfully', 'success');
         this.router.navigate(['/my-tickets']);
       }),
       catchError(error => {
         console.error('Google login Error: ', error);
+        this.notificationService.showNotification('Login Error', 'failed');
         return of(null);
       })
     ).subscribe();
