@@ -24,12 +24,10 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {
-    // Inicjalizacja userEmail$ w konstruktorze
     this.userEmail$ = this.authService.getUserEmail();
   }
 
   ngOnInit(): void {
-    // Inicjalizacja events$ w ngOnInit
     this.events$ = this.eventService.getEvents();
   }
 
@@ -47,25 +45,31 @@ export class HomeComponent implements OnInit {
           const confirmed = confirm(`Are you sure you want to purchase a ticket for ${event.name}?`);
           if (confirmed) {
             return this.ticketService.purchaseTicket(event.id, userEmail).pipe(
-              switchMap(() => {
+              tap(() => {
                 alert(`Ticket purchased for ${event.name}`);
-                return this.ticketService.sendTicketSmsConfirmation(
-                  event.name,
-                  event.startDate,
-                  event.location,
-                  event.googleMapsUrl
-                );
               }),
+              switchMap(() => this.ticketService.sendTicketSmsConfirmation(
+                event.name,
+                event.startDate,
+                event.location,
+                event.googleMapsUrl
+              )),
               tap(() => {
                 alert(`SMS confirmation sent for ${event.name}`);
               }),
-              catchError(() => {
-                alert(`Error purchasing ticket or sending SMS for ${event.name}`);
+              catchError(err => {
+                console.error('Error occurred:', err);
+                alert(`Error occurred during the process for ${event.name}`);
                 return EMPTY;
               })
             );
           }
         }
+        return EMPTY;
+      }),
+      catchError(err => {
+        console.error('Unexpected error:', err);
+        alert(`Unexpected error`);
         return EMPTY;
       })
     ).subscribe();

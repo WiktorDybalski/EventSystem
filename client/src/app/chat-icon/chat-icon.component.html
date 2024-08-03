@@ -1,6 +1,7 @@
-<div class="chat-icon">
-  <button mat-fab color="primary" (click)="openChat()">
-    <mat-icon *ngIf="!isChatOpen">chat</mat-icon>
-  </button>
+<div class="chat-icon-container">
+  <div class="chat-icon" (click)="openChat()">
+    <img src="/assets/images/chat-icon.png" alt="Chat Icon">
+  </div>
   <app-chat-window *ngIf="isChatOpen" (close)="closeChat()"></app-chat-window>
 </div>
+

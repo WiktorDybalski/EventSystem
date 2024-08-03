@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, NgForm} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {catchError, of, tap} from "rxjs";
+import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,7 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -38,10 +40,12 @@ export class RegisterComponent {
           this.authService.setLoggedIn(true);
           this.authService.setUserEmail(email);
           this.userEmailChange.emit(email);
+          this.notificationService.showNotification('Registration successfully', 'success');
           this.router.navigate(['/my-tickets']);
         }),
         catchError(error => {
           console.error('Register Error: ', error);
+          this.notificationService.showNotification('Register Error', 'failed');
           return of(null);
         })
       ).subscribe();

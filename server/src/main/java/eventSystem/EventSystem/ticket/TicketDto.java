@@ -12,5 +12,7 @@ public class TicketDto {
     private Integer eventId;
     private Integer userId;
     private String eventName;
+    private String eventStartDate;
+    private String eventEndDate;
     private String eventLocation;
 }

@@ -7,11 +7,21 @@ import {NotificationComponent} from "./notification/notification.component";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {AuthService} from "./services/auth.service";
 import {Observable, of} from "rxjs";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, ChatIconComponent, ChatWindowComponent, NotificationComponent, NgIf, AsyncPipe],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    ChatIconComponent,
+    ChatWindowComponent,
+    NotificationComponent,
+    NgIf,
+    MatSnackBarModule,
+    AsyncPipe
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
