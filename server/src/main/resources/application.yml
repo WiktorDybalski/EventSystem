@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/event_db
     username: postgres
     password: Password1
     driver-class-name: org.postgresql.Driver
@@ -38,7 +38,5 @@ logging:
       security: TRACE
 twilio:
   account_sid: AC5267434815f467fb3b5fb5f332e6107f
-  auth_token: 1620e13f35dca746c425778d384b933a
+  auth_token: 5ad3e11b8a7f2b364a1d050e495a04fc
   trial_number: +12052368266
-
-# pg_ctl -D "C:\Program Files\PostgreSQL\16\data" start

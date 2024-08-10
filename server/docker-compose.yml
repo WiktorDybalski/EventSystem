@@ -1,14 +1,17 @@
 version: '3.8'
-
 services:
   postgres:
     image: postgres
+    container_name: event_db
     environment:
       POSTGRES_PASSWORD: Password1
       POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: event_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - ./postgres_container_data:/var/lib/postgresql/data
-    entrypoint: ["sh", "-c", "docker-entrypoint.sh postgres & sleep 10 & pg_restore -U postgres -d postgres /var/lib/postgresql/data/postgres_dump.sql"]
+      - postgres_data:/var/lib/postgresql/data
+      - ./event_db.sql:/docker-entrypoint-initdb.d/event_db.sql
+
+volumes:
+  postgres_data:

@@ -10,7 +10,7 @@ export class NotificationService {
 
   showNotification(message: string, type: 'success' | 'failed'): void {
     const config: MatSnackBarConfig = {
-      duration: 100000,
+      duration: 3000,
       verticalPosition: 'top',
       horizontalPosition: 'center',
       panelClass: type === 'success' ? 'notification-good' : 'notification-bad'
