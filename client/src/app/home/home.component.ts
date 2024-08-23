@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { EventService } from "../services/event.service";
-import { catchError, EMPTY, Observable, of, switchMap, tap } from "rxjs";
-import { Event } from '../models/event';
-import { TicketService } from "../services/ticket.service";
-import { Router } from "@angular/router";
-import { AuthService } from "../services/auth.service";
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from "@angular/common";
+import {EventService} from "../services/event.service";
+import {catchError, EMPTY, Observable, of, switchMap, tap} from "rxjs";
+import {Event} from '../models/event';
+import {TicketService} from "../services/ticket.service";
+import {Router} from "@angular/router";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -45,17 +45,24 @@ export class HomeComponent implements OnInit {
           const confirmed = confirm(`Are you sure you want to purchase a ticket for ${event.name}?`);
           if (confirmed) {
             return this.ticketService.purchaseTicket(event.id, userEmail).pipe(
-              tap(() => {
+              switchMap(() => {
                 alert(`Ticket purchased for ${event.name}`);
-              }),
-              switchMap(() => this.ticketService.sendTicketSmsConfirmation(
-                event.name,
-                event.startDate,
-                event.location,
-                event.googleMapsUrl
-              )),
-              tap(() => {
-                alert(`SMS confirmation sent for ${event.name}`);
+
+                const confirmPurchaseSms = confirm(`Do you want to send a confirmation SMS for ${event.name}?`);
+                if (confirmPurchaseSms) {
+                  return this.ticketService.sendTicketSmsConfirmation(
+                    event.name,
+                    event.startDate,
+                    event.location,
+                    event.googleMapsUrl
+                  ).pipe(
+                    tap(() => {
+                      alert(`SMS confirmation sent for ${event.name}`);
+                    })
+                  );
+                }
+
+                return EMPTY;
               }),
               catchError(err => {
                 console.error('Error occurred:', err);
@@ -69,7 +76,7 @@ export class HomeComponent implements OnInit {
       }),
       catchError(err => {
         console.error('Unexpected error:', err);
-        alert(`Unexpected error`);
+        alert(`Unexpected error occurred`);
         return EMPTY;
       })
     ).subscribe();

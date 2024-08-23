@@ -29,7 +29,6 @@ server/target/
 *.ear
 *.pom
 *.class
-*.sql
 *.javadoc
 
 # IntelliJ IDEA

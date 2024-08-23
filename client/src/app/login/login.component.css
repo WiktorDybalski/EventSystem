@@ -4,7 +4,7 @@
   align-items: center;
   height: 90vh;
   width: 100vw;
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  color: #1B2B38;
 }
 
 .auth-form {
@@ -41,7 +41,7 @@
   padding: 0.75rem;
   border: none;
   border-radius: 6px;
-  background-color: #007bff;
+  background-color: #1B2B38;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
@@ -49,7 +49,7 @@
 }
 
 .auth-form button:hover {
-  background-color: #0056b3;
+  background-color: #1B2B19;
 }
 
 .auth-form p {
@@ -58,7 +58,7 @@
 }
 
 .auth-form a {
-  color: #007bff;
+  color: #1B2B38;
   text-decoration: none;
 }
 

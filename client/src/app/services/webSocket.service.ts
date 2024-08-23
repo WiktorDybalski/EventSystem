@@ -1,18 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { Client, IMessage, StompConfig, StompSubscription } from '@stomp/stompjs';
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {Client, IMessage} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import {AuthService} from "./auth.service";
+import ChatMessage from "../models/ChatMessage";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
   private stompClient: Client | undefined;
-  private messageSubject: Subject<{ user: string, content: string }> = new Subject<{ user: string, content: string }>();
+  private messageSubject: Subject<ChatMessage> = new Subject<ChatMessage>();
   private connectionSubject: Subject<void> = new Subject<void>();
+  private userEmail: string | null = null;
 
-  constructor() {
-    this.connect();
+  constructor(private authService: AuthService) {
+    this.authService.getUserEmail().subscribe(email => {
+      this.userEmail = email;
+      this.connect();
+    });
   }
 
   private connect(): void {
@@ -25,8 +31,8 @@ export class WebSocketService {
     });
 
     this.stompClient.onConnect = () => {
-      this.stompClient?.subscribe('/topic/public', (message: IMessage) => {
-        const parsedMessage = JSON.parse(message.body) as { user: string, content: string };
+      this.stompClient?.subscribe(`/topic/user/${this.userEmail}`, (message: IMessage) => {
+        const parsedMessage = JSON.parse(message.body) as ChatMessage;
         this.messageSubject.next(parsedMessage);
       });
       this.connectionSubject.next();
@@ -35,23 +41,20 @@ export class WebSocketService {
     this.stompClient.activate();
   }
 
-  sendMessage(message: { user: string | null; content: string }): void {
+  sendMessage(message: ChatMessage): void {
     if (this.stompClient?.connected) {
       this.stompClient.publish({
-        destination: '/app/chat.sendMessage',
+        destination: `/app/chat.sendMessage`,
         body: JSON.stringify(message)
       });
+      console.log(message);
     } else {
       console.error('STOMP client is not connected.');
     }
   }
 
-  getMessages(): Observable<{ user: string, content: string }> {
+  getMessages(): Observable<ChatMessage> {
     return this.messageSubject.asObservable();
-  }
-
-  getConnection(): Observable<void> {
-    return this.connectionSubject.asObservable();
   }
 }
 

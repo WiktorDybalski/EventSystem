@@ -6,26 +6,27 @@ body {
   border: 0;
   box-sizing: border-box;
   overflow-x: hidden;
+  color: white;
 }
 
-.notification-good {
-  background-color: green !important;
-  color: white !important;
+::-webkit-scrollbar {
+  width: 15px;
 }
 
-.notification-bad {
-  background-color: red !important;
-  color: white !important;
+::-webkit-scrollbar-track {
+  background: #2b3a47;
 }
 
-.mat-mdc-snack-bar-container {
-  position: fixed;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: auto !important;
-  margin: 0 auto !important;
-  z-index: 10000 !important;
-  max-width: fit-content !important;
+::-webkit-scrollbar-thumb {
+  background-color: #5a6980;
+  border-radius: 10px;
+  border: 2px solid #2b3a47;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background-color: #748ba9;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #8ea2c0;
+}

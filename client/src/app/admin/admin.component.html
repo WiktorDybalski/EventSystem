@@ -1,3 +1,40 @@
 <div class="admin">
-  <h1>Admin Page</h1>
+  <div class="chat-layout">
+    <div class="sidenav-container">
+      <div class="sidenav">
+        <div *ngIf="activeChats.length > 0; else noChats">
+          <div *ngFor="let user of activeChats" (click)="selectChat(user)">
+            <div class="chat-user">
+              <span><b>{{user.name}}</b></span>
+              <span>{{ user.messages.at(-1)?.content }}</span>
+            </div>
+          </div>
+        </div>
+        <ng-template #noChats>
+          <div class="no-chats">
+            <p>No active chats</p>
+          </div>
+        </ng-template>
+      </div>
+      <div class="sidenav-content">
+        <div class="chat-window">
+          <h3>{{selectedChat.name}}</h3>
+          <div class="chat-messages">
+            <div class="message" *ngFor="let message of selectedChat?.messages">
+              {{message.sender}}:
+              <p [ngClass]="{'admin-message': message.sender === 'Admin', 'user-message': message.sender !== 'Admin'}">
+                {{message.content}}
+              </p>
+            </div>
+          </div>
+          <div class="message-input-container">
+            <div class="message-input">
+              <input placeholder="Type your message" [(ngModel)]="newMessage" (keydown.enter)="sendMessage()"/>
+            </div>
+            <button class="input-button" (click)="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

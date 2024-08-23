@@ -6,7 +6,8 @@
       <a routerLink="/">Home</a>
       <a *ngIf="!(isLoggedIn$ | async)" routerLink="/login">Login</a>
       <a *ngIf="(isLoggedIn$ | async)" (click)="logout()">Logout</a>
-      <a routerLink="/my-tickets">My Tickets</a>
+      <a *ngIf="(userEmail$ | async) === 'admin@wp.pl'" routerLink="/chats"> Chats </a>
+      <a *ngIf="(userEmail$ | async) !== 'admin@wp.pl'" routerLink="/my-tickets">My Tickets</a>
     </nav>
   </div>
 </header>

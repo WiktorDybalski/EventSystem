@@ -1,4 +1,4 @@
-<div class="chat-icon-container">
+<div *ngIf="(userEmail$ | async) !== 'admin@wp.pl'" class="chat-icon-container">
   <div class="chat-icon" (click)="openChat()">
     <img src="/assets/images/chat-icon.png" alt="Chat Icon">
   </div>

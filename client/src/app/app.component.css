@@ -27,6 +27,7 @@ main {
   width: 100%;
   min-height: 90vh;
   height: auto;
+  background: linear-gradient(135deg, #2C3E50, #34495E);
 }
 
 app-header {

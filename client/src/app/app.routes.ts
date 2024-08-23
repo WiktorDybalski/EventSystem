@@ -11,6 +11,6 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'my-tickets', component: MyTicketsComponent, canActivate: [AuthGuard]},
-  {path: 'admin', component: AdminComponent},
+  {path: 'chats', component: AdminComponent},
   {path: '**', redirectTo: ''}
 ];

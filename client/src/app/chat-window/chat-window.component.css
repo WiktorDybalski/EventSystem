@@ -24,7 +24,7 @@
 }
 
 .chat-header {
-  background: #2196f3;
+  background: #1B2B38;
   color: white;
   padding: 12px;
   display: flex;
@@ -76,9 +76,9 @@
 }
 
 .chat-footer button {
-  background: #2196f3;
+  background: #1B2B38;
   color: white;
-  border: 1px solid #2196f3;
+  border: 1px solid #1B2B38;
   width: 25%;
   padding: 8px 8px;
   border-radius: 8px;
@@ -88,7 +88,7 @@
 }
 
 .chat-footer button:hover {
-  background: #0d8bf8;
+  background: #1B2B32;
   border: solid 2px black;
 }
 
@@ -96,6 +96,7 @@
   padding: 10px;
   margin-bottom: 10px;
   background: whitesmoke;
+  color: #1B2B38;
   border: 1px solid black;
   border-radius: 8px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);

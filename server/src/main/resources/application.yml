@@ -19,8 +19,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 178328488763-s1da94rqu9393kiuql32fke391p20due.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: profile, email, https://www.googleapis.com/auth/calendar
             redirect-uri: "{baseUrl}/api/v1/auth/oauth2/google"
             client-authentication-method: post
@@ -37,6 +37,6 @@ logging:
     springframework:
       security: TRACE
 twilio:
-  account_sid: AC5267434815f467fb3b5fb5f332e6107f
-  auth_token: 5ad3e11b8a7f2b364a1d050e495a04fc
-  trial_number: +12052368266
+  account_sid: ${TWILIO_ACCOUNT_SID}
+  auth_token: ${TWILIO_AUTH_TOKEN}
+  trial_number: ${TWILIO_TRIAL_NUMBER}
