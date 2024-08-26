@@ -16,7 +16,6 @@ public class OAuth2LoginService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final GoogleCalendarService googleCalendarService;
     private final CredentialsService credentialsService;
 
     public ResponseEntity<Map<String, String>> loginWithGoogle(Map<String, String> payload) {
@@ -45,12 +44,6 @@ public class OAuth2LoginService {
             }
 
             String jwtToken = jwtService.generateToken(user);
-
-//            try {
-//                googleCalendarService.getApiTokens(token);
-//            } catch (Exception e) {
-//                return ResponseEntity.status(401).body(Map.of("error", "Invalid Google API token logic "));
-//            }
 
             return ResponseEntity.ok(Map.of("email", email, "token", jwtToken));
         } catch (Exception e) {

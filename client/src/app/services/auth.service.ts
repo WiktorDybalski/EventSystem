@@ -38,10 +38,6 @@ export class AuthService {
     return '';
   }
 
-  private hasToken(): boolean {
-    return !!this.sessionStorageService.getAuthToken();
-  }
-
   setAuthToken(token: string): void {
     this.sessionStorageService.setAuthToken(token);
   }

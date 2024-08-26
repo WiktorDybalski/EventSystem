@@ -47,7 +47,6 @@ export class WebSocketService {
         destination: `/app/chat.sendMessage`,
         body: JSON.stringify(message)
       });
-      console.log(message);
     } else {
       console.error('STOMP client is not connected.');
     }

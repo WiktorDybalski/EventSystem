@@ -36,7 +36,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.chat-user {
+.chat-user, .unread-chat-user {
   display: flex;
   flex-direction: column;
   padding: 12px;
@@ -46,9 +46,13 @@
   color: #ECF0F1;
 }
 
-.chat-user:hover {
+.unread-chat-user {
+  background-color: rosybrown;
+  font-weight: bold;
+}
+
+.chat-user:hover, .unread-chat-user:hover {
   background-color: #1ABC9C;
-  color: #ffffff;
 }
 
 .sidenav-content {

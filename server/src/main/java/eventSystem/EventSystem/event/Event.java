@@ -16,18 +16,12 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
-
     private String name;
-
     private String startDate;
-
     private String endDate;
-
     private String location;
-
     private String imageUrl;
-
     private String googleMapsUrl;
-
 }

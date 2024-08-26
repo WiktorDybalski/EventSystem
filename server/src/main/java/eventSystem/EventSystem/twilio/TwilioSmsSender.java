@@ -17,9 +17,6 @@ public class TwilioSmsSender implements SmsSender {
     private final UserRepository userRepository;
 
     private String getPhoneNumber(SmsRequest smsRequest) {
-        System.out.println("=====================================");
-        System.out.println(smsRequest.getUserEmail());
-        System.out.println("=====================================");
         User user = userRepository.findByEmail(smsRequest.getUserEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         return user.getPhoneNumber();
@@ -31,6 +28,7 @@ public class TwilioSmsSender implements SmsSender {
         }
         return phoneNumber;
     }
+
     @Override
     public void sendSms(SmsRequest smsRequest) {
         String phoneNumber = formatPhoneNumber(this.getPhoneNumber(smsRequest));

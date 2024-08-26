@@ -18,10 +18,6 @@ export class SessionStorageService {
     return value ? JSON.parse(value) : false;
   }
 
-  removeIsLoggedIn(): void {
-    sessionStorage.removeItem(this.isLoggedInKey);
-  }
-
   setUserEmail(value: string): void {
     sessionStorage.setItem(this.userEmailKey, value);
   }
@@ -30,26 +26,12 @@ export class SessionStorageService {
     return sessionStorage.getItem(this.userEmailKey);
   }
 
-  removeUserEmail(): void {
-    sessionStorage.removeItem(this.userEmailKey);
-  }
-
   setAuthToken(value: string): void {
     sessionStorage.setItem(this.authTokenKey, value);
   }
 
   getAuthToken(): string | null {
     return sessionStorage.getItem(this.authTokenKey);
-  }
-
-  removeAuthToken(): void {
-    sessionStorage.removeItem(this.authTokenKey);
-  }
-
-  setAuthVariables(token: string, userEmail: string, isLoggedIn: boolean): void {
-    this.setAuthToken(token);
-    this.setUserEmail(userEmail);
-    this.setIsLoggedIn(isLoggedIn);
   }
 
   setLogoutVariables(): void {

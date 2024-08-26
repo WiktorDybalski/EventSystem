@@ -70,17 +70,15 @@ export class LoginComponent implements OnInit {
       response_type: 'code',
       access_type: 'offline',
       prompt: 'select_account consent',
-      scope: 'openid email profile https://www.googleapis.com/auth/calendar'
+      scope: 'openid email profile'
     });
     google.accounts.id.renderButton(
       document.getElementById('g_id_signin'),
       {theme: 'filled_blue', size: 'large', shape: 'pill', width: '300'}
     );
-    console.log('Google Sign-In button rendered with custom style.');
   }
 
   private handleGoogleSignIn(response: any) {
-    console.log('Google login response: ', response);
     this.authService.authenticateGoogle(response.credential).pipe(
       tap(response => {
         console.log('Google login response: ', response);

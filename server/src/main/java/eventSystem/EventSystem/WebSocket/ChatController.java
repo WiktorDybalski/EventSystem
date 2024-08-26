@@ -16,7 +16,7 @@ public class ChatController {
     private final SimpMessageSendingOperations messageTemplate;
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendMessage(@Payload ChatMessage chatMessage) {
         String recipient = chatMessage.getRecipient();
         messageTemplate.convertAndSend("/topic/user/" + recipient, chatMessage);
     }

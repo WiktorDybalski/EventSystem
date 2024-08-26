@@ -23,8 +23,9 @@ import ChatMessage from "../models/ChatMessage";
 })
 export class AdminComponent implements OnInit {
   activeChats: ChatUser[] = [];
-  selectedChat : ChatUser = {name: '', messages: []};
+  selectedChat : ChatUser = {name: '', isRead: true, messages: []};
   newMessage: string = '';
+  isButtonDisabled: boolean = true;
 
   constructor(private webSocketService: WebSocketService) {
   }
@@ -37,11 +38,14 @@ export class AdminComponent implements OnInit {
         console.log('Chat user: ', chatUser);
         if (chatUser) {
           chatUser.messages.push(message);
+          chatUser.isRead = false;
           console.log('Chat user messages: ', chatUser.messages);
         } else {
-          this.activeChats.push({name: message.sender, messages: [message]});
+          this.activeChats.push({name: message.sender, isRead: false, messages: [message]});
           if (this.activeChats.length === 1) {
+            this.activeChats[0].isRead = true;
             this.selectedChat = this.activeChats[0];
+            this.isButtonDisabled = false;
           }
           console.log('Active chats: ', this.activeChats);
         }
@@ -53,6 +57,7 @@ export class AdminComponent implements OnInit {
   }
 
   selectChat(user: ChatUser) {
+    user.isRead = true;
     this.selectedChat = user;
   }
 

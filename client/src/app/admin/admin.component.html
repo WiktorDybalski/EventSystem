@@ -4,7 +4,7 @@
       <div class="sidenav">
         <div *ngIf="activeChats.length > 0; else noChats">
           <div *ngFor="let user of activeChats" (click)="selectChat(user)">
-            <div class="chat-user">
+            <div [ngClass]="{'unread-chat-user': !user.isRead, 'chat-user': user.isRead}">
               <span><b>{{user.name}}</b></span>
               <span>{{ user.messages.at(-1)?.content }}</span>
             </div>
@@ -31,7 +31,7 @@
             <div class="message-input">
               <input placeholder="Type your message" [(ngModel)]="newMessage" (keydown.enter)="sendMessage()"/>
             </div>
-            <button class="input-button" (click)="sendMessage()">Send</button>
+            <button class="input-button" [disabled]="isButtonDisabled" (click)="sendMessage()">Send</button>
           </div>
         </div>
       </div>

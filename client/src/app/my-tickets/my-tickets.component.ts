@@ -31,7 +31,6 @@ export class MyTicketsComponent implements OnInit {
       }),
       tap((data: Ticket[]) => {
         this.tickets = data;
-        console.log('Tickets:', this.tickets);
       }),
       catchError((error) => {
         console.error('Error fetching tickets', error);

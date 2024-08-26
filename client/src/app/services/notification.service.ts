@@ -15,8 +15,6 @@ export class NotificationService {
       horizontalPosition: 'center',
       panelClass: type === 'success' ? 'notification-good' : 'notification-bad'
     };
-
-    console.log(message);
     this.snackBar.open(message, 'Close', config);
   }
 }
